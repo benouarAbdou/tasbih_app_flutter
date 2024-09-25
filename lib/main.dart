@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: MyColors.primaryMaterialColor,
         textTheme: GoogleFonts.cairoTextTheme(),
       ),
+      title: "tasbih",
       home: const TasbihPage(),
     );
   }

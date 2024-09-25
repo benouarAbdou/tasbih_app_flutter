@@ -1,4 +1,6 @@
+import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
+import 'package:tasbih/common/functions/preferenceHelper.dart';
 import 'package:tasbih/models/dikr_model.dart';
 import 'package:tasbih/repositories/tasbih_repo.dart';
 
@@ -12,6 +14,20 @@ class TasbihController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    checkForNewDay();
+  }
+
+  // Check if it's a new day and reset counts if necessary
+  void checkForNewDay() async {
+    bool isNewDay = await PreferencesHelper.isNewDay();
+
+    if (isNewDay) {
+      // Reset all todayCounts to 0 if it's a new day
+      resetAllTodayCounts();
+      await PreferencesHelper.saveCurrentDate(); // Save the new date
+    }
+
+    // Fetch all Dikrs regardless of whether it was a new day or not
     fetchAllDikrs();
   }
 
@@ -35,6 +51,10 @@ class TasbihController extends GetxController {
 
     // Update the currentDikr
     currentDikr.value = updatedDikr;
+
+    if (currentDikr.value.todayCount % 100 == 0) {
+      Vibrate.feedback(FeedbackType.success);
+    }
 
     // Find the index of the currentDikr in the list and update it
     int index = dikrs.indexWhere((dikr) => dikr.id == updatedDikr.id);
@@ -67,5 +87,47 @@ class TasbihController extends GetxController {
 
     // Update the value in the repository
     await _repository.updateGoalValue(updatedDikr.id, newGoal);
+  }
+
+  void resetAllTodayCounts() async {
+    // Reset in the local database
+    await _repository.resetAllTodayCounts();
+
+    // Update the list in memory (dikrs)
+    dikrs.value = dikrs.map((dikr) {
+      return Dikr(
+        id: dikr.id,
+        text: dikr.text,
+        todayCount: 0, // Reset todayCount to 0
+        goalValue: dikr.goalValue,
+      );
+    }).toList();
+
+    // Update the currentDikr if necessary
+    if (dikrs.isNotEmpty) {
+      currentDikr.value = dikrs[0]; // Optional: adjust logic if needed
+    }
+  }
+
+  void resetOneTodayCount(int dikrId) async {
+    // Reset in the local database
+    await _repository.resetTodayCount(dikrId);
+
+    // Update the list in memory (dikrs)
+    dikrs.value = dikrs.map((dikr) {
+      return dikr.id == dikrId
+          ? Dikr(
+              id: dikr.id,
+              text: dikr.text,
+              todayCount: 0, // Reset todayCount to 0
+              goalValue: dikr.goalValue,
+            )
+          : dikr;
+    }).toList();
+
+    // Update the currentDikr if necessary
+    if (currentDikr.value.id == dikrId) {
+      currentDikr.value = dikrs.firstWhere((dikr) => dikr.id == dikrId);
+    }
   }
 }

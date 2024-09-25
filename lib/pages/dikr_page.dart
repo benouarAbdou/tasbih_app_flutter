@@ -14,6 +14,15 @@ class DikrPage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        elevation: 0,
+        child: const Icon(
+          Icons.add,
+          color: MyColors.whiteColor,
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 40.0),
         decoration: const BoxDecoration(

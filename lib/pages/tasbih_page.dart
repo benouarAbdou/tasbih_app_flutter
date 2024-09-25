@@ -73,8 +73,7 @@ class TasbihPage extends StatelessWidget {
                           icon: Icons.edit,
                           circleColor: MyColors.secondaryColor,
                           onPressed: () {
-                            ModalsAllerts.showGoalUpdateModal(
-                                context, controller);
+                            ModalsAllerts.showGoalUpdateModal(context);
                           },
                         ),
                         const SizedBox(width: 10),
@@ -87,12 +86,32 @@ class TasbihPage extends StatelessWidget {
                             )),
                       ],
                     ),
-                    Obx(() => Text(
-                          "${controller.currentDikr.value.todayCount} ",
-                          style: GoogleFonts.rakkas(
-                            color: MyColors.whiteColor,
-                            fontSize: 100,
-                          ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Obx(() => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${controller.currentDikr.value.todayCount} ",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.rakkas(
+                                  color: MyColors.whiteColor,
+                                  fontSize: 120,
+                                  height: 1),
+                            ),
+                            CircularButton(
+                                height: 30,
+                                width: 30,
+                                iconSize: 20,
+                                circleColor: Colors.redAccent,
+                                icon: Icons.restart_alt,
+                                onPressed: () {
+                                  controller.resetOneTodayCount(
+                                      controller.currentDikr.value.id);
+                                }),
+                          ],
                         )),
                     CircularButton(
                       height: 150,

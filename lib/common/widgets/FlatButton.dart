@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tasbih/constants/colors.dart';
-import 'package:tasbih/controllers/tasbih_controller.dart';
 
 class FlatButton extends StatelessWidget {
   final String text;
-  final TextEditingController goalController;
-  final TasbihController controller;
-  const FlatButton(
-      {super.key,
-      required this.text,
-      required this.goalController,
-      required this.controller});
+  final Function onTap;
+  const FlatButton({super.key, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +16,8 @@ class FlatButton extends StatelessWidget {
           elevation: 0,
           backgroundColor: MyColors.primaryColor,
         ),
-        onPressed: () {
-          int newGoalValue = int.tryParse(goalController.text) ?? 0;
-          controller.updateGoalValue(newGoalValue);
-          Navigator.of(context).pop(); // Close the modal
-        },
+        onPressed: () =>
+            onTap(), // Fixed: Use a lambda to pass the function reference.
         child: Text(text),
       ),
     );

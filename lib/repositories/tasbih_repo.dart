@@ -17,6 +17,15 @@ class TasbihRepository {
     return null;
   }
 
+  Future<void> resetAllTodayCounts() async {
+    await _sqlDb.updateData('UPDATE dikr SET todayCount = 0');
+  }
+
+  Future<void> resetTodayCount(int dikrId) async {
+    await _sqlDb
+        .updateData('UPDATE dikr SET todayCount = 0 WHERE dikrId = $dikrId');
+  }
+
   // Update the todayCount in the database
   Future<void> updateTodayCount(int dikrId, int newCount) async {
     await _sqlDb.updateData(

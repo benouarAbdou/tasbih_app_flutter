@@ -4,8 +4,8 @@ import 'package:tasbih/common/widgets/FlatButton.dart';
 import 'package:tasbih/controllers/tasbih_controller.dart';
 
 class ModalsAllerts {
-  static showGoalUpdateModal(
-      BuildContext context, TasbihController controller) {
+  static showGoalUpdateModal(BuildContext context) {
+    final TasbihController controller = TasbihController.instance;
     TextEditingController goalController = TextEditingController(
       text: controller.currentDikr.value.goalValue.toString(),
     );
@@ -49,9 +49,13 @@ class ModalsAllerts {
               const SizedBox(height: 20),
               // Button to update the goal value
               FlatButton(
-                  text: "تحديث",
-                  goalController: goalController,
-                  controller: controller)
+                text: "تحديث",
+                onTap: () {
+                  int newGoalValue = int.tryParse(goalController.text) ?? 0;
+                  controller.updateGoalValue(newGoalValue);
+                  Navigator.of(context).pop();
+                },
+              )
             ],
           ),
         );
