@@ -7,7 +7,7 @@ class ModalsAllerts {
   static showGoalUpdateModal(
       BuildContext context, TasbihController controller) {
     TextEditingController goalController = TextEditingController(
-      text: controller.goalValue.value.toString(),
+      text: controller.currentDikr.value.goalValue.toString(),
     );
 
     showModalBottomSheet(

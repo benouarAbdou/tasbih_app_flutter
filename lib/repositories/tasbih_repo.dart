@@ -3,6 +3,10 @@ import 'package:tasbih/common/functions/myDataBase.dart';
 class TasbihRepository {
   final SqlDb _sqlDb = SqlDb();
 
+  Future<List<Map<String, dynamic>>> getAllDikrs() async {
+    return await _sqlDb.readData('SELECT * FROM dikr');
+  }
+
   // Fetch the first dikr from the table
   Future<Map<String, dynamic>?> getFirstDikr() async {
     List<Map<String, dynamic>> data =

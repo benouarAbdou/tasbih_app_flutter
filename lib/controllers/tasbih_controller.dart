@@ -1,41 +1,71 @@
 import 'package:get/get.dart';
+import 'package:tasbih/models/dikr_model.dart';
 import 'package:tasbih/repositories/tasbih_repo.dart';
 
 class TasbihController extends GetxController {
+  static TasbihController get instance => Get.find();
   final TasbihRepository _repository = TasbihRepository();
 
-  // State variables
-  var dikr = ''.obs;
-  var todayCount = 0.obs;
-  var goalValue = 0.obs;
-  var dikrId = 0.obs; // Store the id of the dikr
+  var dikrs = <Dikr>[].obs;
+  var currentDikr = Dikr.empty().obs;
 
   @override
   void onInit() {
     super.onInit();
-    fetchFirstDikr();
+    fetchAllDikrs();
   }
 
-  // Fetch the first dikr and update state
-  void fetchFirstDikr() async {
-    final dikrData = await _repository.getFirstDikr();
-    if (dikrData != null) {
-      dikr.value = dikrData['dikr'];
-      todayCount.value = dikrData['todayCount'] ?? 0;
-      goalValue.value = dikrData['goalValue'] ?? 0;
-      dikrId.value = dikrData['dikrId'];
+  void fetchAllDikrs() async {
+    final dikrDataList = await _repository.getAllDikrs();
+    dikrs.value = dikrDataList.map((data) => Dikr.fromMap(data)).toList();
+    if (dikrs.isNotEmpty) {
+      currentDikr.value = dikrs[0];
     }
   }
 
-  // Increment todayCount and save the new value to the database
+  // Increment todayCount and update the list as well as the currentDikr
   void incrementTodayCount() async {
-    todayCount.value++;
-    await _repository.updateTodayCount(dikrId.value, todayCount.value);
+    // Create the updated Dikr
+    var updatedDikr = Dikr(
+      id: currentDikr.value.id,
+      text: currentDikr.value.text,
+      todayCount: currentDikr.value.todayCount + 1,
+      goalValue: currentDikr.value.goalValue,
+    );
+
+    // Update the currentDikr
+    currentDikr.value = updatedDikr;
+
+    // Find the index of the currentDikr in the list and update it
+    int index = dikrs.indexWhere((dikr) => dikr.id == updatedDikr.id);
+    if (index != -1) {
+      dikrs[index] = updatedDikr; // Update the list
+    }
+
+    // Update the value in the repository
+    await _repository.updateTodayCount(updatedDikr.id, updatedDikr.todayCount);
   }
 
-  // Update the goal value
+  // Update the goalValue and reflect the change in the list as well as currentDikr
   void updateGoalValue(int newGoal) async {
-    goalValue.value = newGoal;
-    await _repository.updateGoalValue(dikrId.value, newGoal);
+    // Create the updated Dikr
+    var updatedDikr = Dikr(
+      id: currentDikr.value.id,
+      text: currentDikr.value.text,
+      todayCount: currentDikr.value.todayCount,
+      goalValue: newGoal,
+    );
+
+    // Update the currentDikr
+    currentDikr.value = updatedDikr;
+
+    // Find the index of the currentDikr in the list and update it
+    int index = dikrs.indexWhere((dikr) => dikr.id == updatedDikr.id);
+    if (index != -1) {
+      dikrs[index] = updatedDikr; // Update the list
+    }
+
+    // Update the value in the repository
+    await _repository.updateGoalValue(updatedDikr.id, newGoal);
   }
 }
