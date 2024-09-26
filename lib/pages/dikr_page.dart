@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tasbih/common/functions/modals&allerts.dart';
 import 'package:tasbih/common/widgets/DikrWidget.dart';
 import 'package:tasbih/constants/colors.dart';
 import 'package:tasbih/controllers/tasbih_controller.dart';
@@ -16,7 +17,9 @@ class DikrPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          ModalsAllerts.showAddDikrModal(context);
+        },
         elevation: 0,
         child: const Icon(
           Icons.add,
@@ -63,6 +66,7 @@ class DikrPage extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
                 return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                   padding: EdgeInsets.zero,
                   itemCount: controller.dikrs.length,
                   itemBuilder: (context, index) {

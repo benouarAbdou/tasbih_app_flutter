@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesHelper {
   static const String lastCheckedDateKey = 'lastCheckedDate';
+  static const String _currentDikrIdKey = 'currentDikrIdKey';
 
   // Get the last checked date from SharedPreferences
   static Future<DateTime?> getLastCheckedDate() async {
@@ -33,5 +34,17 @@ class PreferencesHelper {
     return now.year != lastCheckedDate.year ||
         now.month != lastCheckedDate.month ||
         now.day != lastCheckedDate.day;
+  }
+
+  // Save currentDikr ID
+  static Future<void> saveCurrentDikrId(int dikrId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(_currentDikrIdKey, dikrId);
+  }
+
+  // Retrieve the last currentDikr ID
+  static Future<int?> getLastCurrentDikrId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(_currentDikrIdKey);
   }
 }

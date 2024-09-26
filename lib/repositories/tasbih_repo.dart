@@ -37,4 +37,17 @@ class TasbihRepository {
     await _sqlDb.updateData(
         'UPDATE dikr SET goalValue = $newGoal WHERE dikrId = $dikrId');
   }
+
+  // Method to add a new Dikr to the database
+  Future<int> addDikr(String text, int goalValue) async {
+    return await _sqlDb.insertData('''
+      INSERT INTO dikr (dikr, goalValue, todayCount)
+      VALUES ('$text', $goalValue, 0)
+    ''');
+  }
+
+  // Add this to the TasbihRepository class
+  Future<void> deleteDikr(int dikrId) async {
+    await _sqlDb.deleteData('DELETE FROM dikr WHERE dikrId = $dikrId');
+  }
 }

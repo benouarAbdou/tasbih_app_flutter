@@ -34,14 +34,25 @@ class TasbihController extends GetxController {
   void fetchAllDikrs() async {
     final dikrDataList = await _repository.getAllDikrs();
     dikrs.value = dikrDataList.map((data) => Dikr.fromMap(data)).toList();
+
     if (dikrs.isNotEmpty) {
-      currentDikr.value = dikrs[0];
+      // Get the last selected Dikr ID from SharedPreferences
+      int? lastDikrId = await PreferencesHelper.getLastCurrentDikrId();
+
+      if (lastDikrId != null) {
+        // Find the saved currentDikr by ID
+        currentDikr.value = dikrs.firstWhere(
+          (dikr) => dikr.id == lastDikrId,
+          orElse: () => dikrs[0],
+        );
+      } else {
+        currentDikr.value = dikrs[0]; // Fallback to the first Dikr
+      }
     }
   }
 
   // Increment todayCount and update the list as well as the currentDikr
   void incrementTodayCount() async {
-    // Create the updated Dikr
     var updatedDikr = Dikr(
       id: currentDikr.value.id,
       text: currentDikr.value.text,
@@ -49,20 +60,21 @@ class TasbihController extends GetxController {
       goalValue: currentDikr.value.goalValue,
     );
 
-    // Update the currentDikr
+    // Update currentDikr
     currentDikr.value = updatedDikr;
+
+    // Save currentDikr ID
+    await PreferencesHelper.saveCurrentDikrId(updatedDikr.id);
 
     if (currentDikr.value.todayCount % 100 == 0) {
       Vibrate.feedback(FeedbackType.success);
     }
 
-    // Find the index of the currentDikr in the list and update it
+    // Update the list and repository
     int index = dikrs.indexWhere((dikr) => dikr.id == updatedDikr.id);
     if (index != -1) {
-      dikrs[index] = updatedDikr; // Update the list
+      dikrs[index] = updatedDikr;
     }
-
-    // Update the value in the repository
     await _repository.updateTodayCount(updatedDikr.id, updatedDikr.todayCount);
   }
 
@@ -128,6 +140,36 @@ class TasbihController extends GetxController {
     // Update the currentDikr if necessary
     if (currentDikr.value.id == dikrId) {
       currentDikr.value = dikrs.firstWhere((dikr) => dikr.id == dikrId);
+    }
+  }
+
+  // Method to add a new Dikr
+  void addDikr(String text, int goalValue) async {
+    // Insert new Dikr into the database and get the newly inserted ID
+    int newDikrId = await _repository.addDikr(text, goalValue);
+
+    // Create a new Dikr object and add it to the in-memory list
+    var newDikr = Dikr(
+      id: newDikrId,
+      text: text,
+      todayCount: 0,
+      goalValue: goalValue,
+    );
+
+    dikrs.add(newDikr);
+  }
+
+  // Add this to the TasbihController class
+  void deleteDikr(int dikrId) async {
+    await _repository.deleteDikr(dikrId);
+    dikrs.removeWhere((dikr) => dikr.id == dikrId);
+
+    if (currentDikr.value.id == dikrId) {
+      if (dikrs.isNotEmpty) {
+        currentDikr.value = dikrs.first;
+        // Save the new currentDikr ID
+        await PreferencesHelper.saveCurrentDikrId(currentDikr.value.id);
+      }
     }
   }
 }

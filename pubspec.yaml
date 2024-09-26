@@ -25,6 +25,7 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_vibrate: ^1.3.0
   flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: 2.2.19
 
 dev_dependencies:
   flutter_test:
@@ -42,3 +43,18 @@ flutter:
   # Adding assets.
   assets:
     - assets/background.png
+    - assets/icon.png
+    - assets/icon_big.png 
+
+
+flutter_native_splash:
+  color: "#FFFFFF"  # Background color (white)
+  image: assets/icon_big.png 
+  fullscreen: true  # Ensures fullscreen display
+  android: true
+  ios: true
+  web: false
+  android_12:
+    image: assets/icon_big.png 
+    icon_background_color: "#FFFFFF"
+  position: center  # Icon should be centered
