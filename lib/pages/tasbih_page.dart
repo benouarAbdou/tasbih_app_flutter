@@ -107,9 +107,18 @@ class TasbihPage extends StatelessWidget {
                                 iconSize: 20,
                                 circleColor: Colors.redAccent,
                                 icon: Icons.restart_alt,
-                                onPressed: () {
-                                  controller.resetOneTodayCount(
-                                      controller.currentDikr.value.id);
+                                onPressed: () async {
+                                  bool? confirmReset = await ModalsAllerts
+                                      .showDeleteConfirmation(
+                                    context,
+                                    'إعادة تعيين',
+                                    'هل أنت متأكد أنك تريد محو تقدمك في هذا الذكر؟',
+                                    'إعادة تعيين',
+                                  );
+                                  if (confirmReset == true) {
+                                    controller.resetOneTodayCount(
+                                        controller.currentDikr.value.id);
+                                  }
                                 }),
                           ],
                         )),

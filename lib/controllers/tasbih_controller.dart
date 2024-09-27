@@ -65,9 +65,9 @@ class TasbihController extends GetxController {
 
     // Save currentDikr ID
     await PreferencesHelper.saveCurrentDikrId(updatedDikr.id);
-
+    Vibrate.feedback(FeedbackType.light);
     if (currentDikr.value.todayCount % 100 == 0) {
-      Vibrate.feedback(FeedbackType.success);
+      Vibrate.feedback(FeedbackType.heavy);
     }
 
     // Update the list and repository

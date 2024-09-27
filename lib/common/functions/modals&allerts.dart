@@ -154,4 +154,31 @@ class ModalsAllerts {
       },
     );
   }
+
+  static Future<bool?> showDeleteConfirmation(
+    BuildContext context,
+    String title,
+    String content,
+    String confirmText,
+  ) {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title, textAlign: TextAlign.right),
+          content: Text(content, textAlign: TextAlign.right),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // Cancel
+              child: const Text('إلغاء'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true), // Confirm
+              child: Text(confirmText),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

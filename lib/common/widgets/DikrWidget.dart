@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tasbih/common/functions/modals&allerts.dart';
 import 'package:tasbih/constants/colors.dart';
 import 'package:tasbih/controllers/tasbih_controller.dart';
 import 'package:tasbih/models/dikr_model.dart';
@@ -48,7 +49,12 @@ class DikrWidget extends StatelessWidget {
                   _showCannotDeleteMessage(context);
                 } else {
                   // Confirm deletion
-                  bool? confirmDelete = await _showDeleteConfirmation(context);
+                  bool? confirmDelete =
+                      await ModalsAllerts.showDeleteConfirmation(
+                          context,
+                          'حذف الذكر',
+                          'هل أنت متأكد أنك تريد حذف هذا الذكر؟',
+                          'حذف');
                   if (confirmDelete == true) {
                     controller.deleteDikr(dikr.id); // Delete the Dikr
                   }
@@ -95,29 +101,6 @@ class DikrWidget extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  // Show a confirmation dialog before deletion
-  Future<bool?> _showDeleteConfirmation(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('حذف الذكر', textAlign: TextAlign.right),
-          content: const Text('هل أنت متأكد أنك تريد حذف هذا الذكر؟'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // Cancel
-              child: const Text('إلغاء'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(true), // Confirm
-              child: const Text('حذف'),
-            ),
-          ],
-        );
-      },
     );
   }
 
