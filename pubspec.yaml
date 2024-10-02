@@ -46,6 +46,7 @@ flutter:
     - assets/background.png
     - assets/icon.png
     - assets/icon_big.png 
+  
 
 
 flutter_native_splash:
