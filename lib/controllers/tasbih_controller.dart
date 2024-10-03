@@ -1,9 +1,9 @@
-import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:tasbih/common/functions/preferenceHelper.dart';
 import 'package:tasbih/models/dikr_model.dart';
 import 'package:tasbih/repositories/tasbih_repo.dart';
+import 'package:vibration/vibration.dart';
 
 class TasbihController extends GetxController {
   static TasbihController get instance => Get.find();
@@ -66,9 +66,9 @@ class TasbihController extends GetxController {
 
     // Save currentDikr ID
     await PreferencesHelper.saveCurrentDikrId(updatedDikr.id);
-    Vibrate.feedback(FeedbackType.light);
+    Vibration.vibrate(duration: 300);
     if (currentDikr.value.todayCount % 100 == 0) {
-      Vibrate.feedback(FeedbackType.heavy);
+      Vibration.vibrate(duration: 1000);
     }
 
     // Update the list and repository
