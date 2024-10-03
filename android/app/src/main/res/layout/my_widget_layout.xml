@@ -1,26 +1,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rounded_background">
+    android:background="@drawable/rounded_background"
+    android:gravity="center">
 
-    <TextView
-        android:id="@+id/dikr_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/dikr_value"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:fontFamily="@font/cairo_medium"
-        android:text="أستغفر الله" />
-
-    <TextView
-        android:id="@+id/dikr_value"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="#FFFFFF"
-        android:textSize="36sp"
-        android:fontFamily="@font/rakkas_regular"
-        android:text="0" />
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/dikr_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:fontFamily="@font/cairo_medium"
+            android:text="أستغفر الله"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:lineSpacingExtra="0dp" 
+            android:lineSpacingMultiplier="0.9"/> <!-- Slightly reduce default line spacing -->
+
+        <TextView
+            android:id="@+id/dikr_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:fontFamily="@font/rakkas_regular"
+            android:text="0" />
+
+    </LinearLayout>
 </RelativeLayout>
