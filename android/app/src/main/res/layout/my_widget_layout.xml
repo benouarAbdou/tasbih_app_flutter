@@ -11,8 +11,8 @@
         android:layout_above="@+id/dikr_value"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        android:fontFamily="@font/cairo_medium"  
-        android:text="سبحان الله" />
+        android:fontFamily="@font/cairo_medium"
+        android:text="أستغفر الله" />
 
     <TextView
         android:id="@+id/dikr_value"
@@ -21,6 +21,6 @@
         android:layout_centerInParent="true"
         android:textColor="#FFFFFF"
         android:textSize="36sp"
-        android:fontFamily="@font/rakkas_regular"  
-        android:text="1025" />
+        android:fontFamily="@font/rakkas_regular"
+        android:text="0" />
 </RelativeLayout>

@@ -1,5 +1,6 @@
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:get/get.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:tasbih/common/functions/preferenceHelper.dart';
 import 'package:tasbih/models/dikr_model.dart';
 import 'package:tasbih/repositories/tasbih_repo.dart';
@@ -76,6 +77,24 @@ class TasbihController extends GetxController {
       dikrs[index] = updatedDikr;
     }
     await _repository.updateTodayCount(updatedDikr.id, updatedDikr.todayCount);
+
+    // Update the widget after increment
+    _updateWidget(updatedDikr.text, updatedDikr.todayCount);
+  }
+
+// Function to update the widget
+  Future<void> _updateWidget(String dikrName, int dikrValue) async {
+    try {
+      await HomeWidget.saveWidgetData<String>('dikr_name', dikrName);
+      await HomeWidget.saveWidgetData<String>(
+          'dikr_value', dikrValue.toString());
+      await HomeWidget.updateWidget(
+        name: 'MyWidgetProvider', // Android Widget Provider Class Name
+      );
+      print("Widget Updated");
+    } catch (e) {
+      print('Error updating widget: $e');
+    }
   }
 
   // Update the goalValue and reflect the change in the list as well as currentDikr

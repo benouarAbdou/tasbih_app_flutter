@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:tasbih/constants/colors.dart';
 import 'package:tasbih/pages/tasbih_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Enable edge-to-edge mode
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  await HomeWidget.registerBackgroundCallback(backgroundCallback);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -20,6 +23,15 @@ void main() {
   ));
 
   runApp(const MyApp());
+}
+
+Future<void> backgroundCallback(Uri? uri) async {
+  if (uri?.host == 'updatewidget') {
+    await HomeWidget.updateWidget(
+      name: 'MyWidgetProvider',
+      iOSName: 'MyWidget',
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
